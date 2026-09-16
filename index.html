@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>between us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg-top: #241b2b;
+    --bg-mid: #2c2130;
+    --bg-bot: #3a2a2e;
+    --paper: #f7f1e7;
+    --paper-edge: #ece2d2;
+    --ink: #2b2230;
+    --ink-soft: #6b5f63;
+    --glow: rgba(232, 168, 124, 0.22);
+
+    /* per-theme accents */
+    --c-inner: #3e7c84;
+    --c-history: #a9712e;
+    --c-hopes: #6c5ca6;
+    --c-stress: #b05c5c;
+    --c-values: #4f7a5b;
+    --c-love: #c45a78;
+
+    --accent: var(--c-love);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100%;
+  }
+
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    color: var(--paper);
+    background:
+      radial-gradient(120% 80% at 50% 18%, var(--glow), transparent 60%),
+      linear-gradient(170deg, var(--bg-top) 0%, var(--bg-mid) 48%, var(--bg-bot) 100%);
+    background-attachment: fixed;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(1.25rem, 4vw, 2.5rem) 1.25rem 2rem;
+  }
+
+  /* soft breathing candlelight behind the card */
+  .ambient {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(40% 32% at 50% 42%, var(--glow), transparent 70%);
+    opacity: 0.9;
+    animation: breathe 7s ease-in-out infinite;
+    transition: background 700ms ease;
+    z-index: 0;
+  }
+  @keyframes breathe {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50%      { opacity: 0.95; transform: scale(1.06); }
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+
+  .mark {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: rgba(247, 241, 231, 0.72);
+    margin: 0 0 0.15rem;
+  }
+  .mark-sub {
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(247, 241, 231, 0.42);
+    margin: 0 0 clamp(1.5rem, 5vw, 2.75rem);
+  }
+
+  /* the card */
+  .card {
+    width: 100%;
+    background:
+      linear-gradient(180deg, #fbf6ee 0%, var(--paper) 55%, var(--paper-edge) 100%);
+    color: var(--ink);
+    border-radius: 22px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.6) inset,
+      0 24px 48px -20px rgba(0, 0, 0, 0.55),
+      0 6px 16px -8px rgba(0, 0, 0, 0.4);
+    padding: clamp(1.75rem, 6vw, 3rem);
+    min-height: clamp(260px, 46vh, 360px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--accent);
+    opacity: 0.85;
+    transition: background 500ms ease;
+  }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 1.1rem;
+    transition: color 500ms ease;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    transition: background 500ms ease;
+  }
+
+  .question {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-size: clamp(1.55rem, 5.2vw, 2.45rem);
+    line-height: 1.28;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .fade {
+    animation: rise 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* draw button */
+  .draw {
+    margin-top: clamp(1.5rem, 5vw, 2.25rem);
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--bg-top);
+    background: linear-gradient(180deg, #f4d8b8 0%, #e8a87c 100%);
+    border: none;
+    border-radius: 999px;
+    padding: 0.95rem 2.1rem;
+    cursor: pointer;
+    box-shadow: 0 10px 24px -12px rgba(232, 168, 124, 0.8);
+    transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+  }
+  .draw:hover { transform: translateY(-1px); filter: brightness(1.04); }
+  .draw:active { transform: translateY(1px) scale(0.99); }
+  .draw:focus-visible {
+    outline: 3px solid rgba(244, 216, 184, 0.9);
+    outline-offset: 3px;
+  }
+
+  .hint {
+    margin-top: 0.85rem;
+    font-size: 0.74rem;
+    color: rgba(247, 241, 231, 0.4);
+  }
+
+  /* theme filter */
+  .themes {
+    margin-top: auto;
+    padding-top: clamp(2rem, 7vw, 3rem);
+    width: 100%;
+  }
+  .themes-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(247, 241, 231, 0.4);
+    text-align: center;
+    margin: 0 0 0.85rem;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  .chip {
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba(247, 241, 231, 0.55);
+    background: rgba(247, 241, 231, 0.04);
+    border: 1px solid rgba(247, 241, 231, 0.14);
+    border-radius: 999px;
+    padding: 0.42rem 0.85rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: color 180ms ease, background 180ms ease, border-color 180ms ease, opacity 180ms ease;
+  }
+  .chip .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--dot);
+    opacity: 0.55;
+    transition: opacity 180ms ease;
+  }
+  .chip[aria-pressed="true"] {
+    color: var(--paper);
+    background: rgba(247, 241, 231, 0.12);
+    border-color: rgba(247, 241, 231, 0.32);
+  }
+  .chip[aria-pressed="true"] .dot { opacity: 1; }
+  .chip:focus-visible {
+    outline: 2px solid rgba(244, 216, 184, 0.85);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ambient { animation: none; }
+    .fade { animation: none; }
+    .draw, .chip { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <p class="mark">between us</p>
+    <p class="mark-sub">one question at a time</p>
+
+    <section class="card" aria-live="polite">
+      <p class="eyebrow" id="eyebrow">Love &amp; Connection</p>
+      <h1 class="question" id="question">Tap below to draw your first question.</h1>
+    </section>
+
+    <button class="draw" id="draw" type="button">Draw a question</button>
+    <p class="hint">Press space or enter to draw another</p>
+
+    <div class="themes">
+      <p class="themes-label">Choose your themes</p>
+      <div class="chips" id="chips"></div>
+    </div>
+  </main>
+
+<script>
+  const THEMES = [
+    {
+      name: "Inner World & Emotions",
+      key: "inner",
+      color: "var(--c-inner)",
+      dot: "#3e7c84",
+      questions: [
+        "What's been weighing on you this week that I might not know about?",
+        "What's something you're proud of right now that you haven't told me?",
+        "What's a fear you've had lately, even a small one?",
+        "When did you last feel really at peace? What were you doing?",
+        "Is there something you're dreading right now?"
+      ]
+    },
+    {
+      name: "History & Memory",
+      key: "history",
+      color: "var(--c-history)",
+      dot: "#a9712e",
+      questions: [
+        "What's your favourite memory of us from the first year we were together?",
+        "What was the happiest moment of your childhood?",
+        "Who was your best friend growing up, and what made them special?",
+        "What's a memory from your family that still affects you today?",
+        "What did you want to be when you were a kid?"
+      ]
+    },
+    {
+      name: "Hopes & Dreams",
+      key: "hopes",
+      color: "var(--c-hopes)",
+      dot: "#6c5ca6",
+      questions: [
+        "If money weren't a factor, what would you want to be doing in five years?",
+        "Is there a dream you've quietly given up on? Why?",
+        "What's something you'd love for us to do together that we haven't yet?",
+        "What does your ideal ordinary Tuesday look like, ten years from now?",
+        "What's a skill or hobby you'd love to learn?"
+      ]
+    },
+    {
+      name: "Stress & Daily Life",
+      key: "stress",
+      color: "var(--c-stress)",
+      dot: "#b05c5c",
+      questions: [
+        "What's the most stressful part of your day right now?",
+        "Who in your life is currently draining your energy, and who's restoring it?",
+        "What's something small I could do this week that would make your life easier?",
+        "Is there a friendship or relationship outside of us that's on your mind lately?"
+      ]
+    },
+    {
+      name: "Values & Identity",
+      key: "values",
+      color: "var(--c-values)",
+      dot: "#4f7a5b",
+      questions: [
+        "What does feeling respected look like to you right now?",
+        "What's a belief you hold today that's different from five years ago?",
+        "What's something about yourself you're still figuring out?",
+        "What's a value you want to make sure we pass on if we ever have/raise kids?"
+      ]
+    },
+    {
+      name: "Love & Connection",
+      key: "love",
+      color: "var(--c-love)",
+      dot: "#c45a78",
+      questions: [
+        "What's something I do that makes you feel most loved?",
+        "When do you feel closest to me?",
+        "Is there a way I show love that doesn't quite land for you?",
+        "What's a small gesture from me, recently, that meant more than I probably realised?"
+      ]
+    }
+  ];
+
+  const active = new Set(THEMES.map(t => t.key));
+  let queue = [];
+  let lastShown = null;
+
+  const elQuestion = document.getElementById("question");
+  const elEyebrow = document.getElementById("eyebrow");
+  const elCard = document.querySelector(".card");
+  const elDraw = document.getElementById("draw");
+  const elChips = document.getElementById("chips");
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function buildQueue() {
+    const pool = [];
+    THEMES.forEach(theme => {
+      if (active.has(theme.key)) {
+        theme.questions.forEach(q => pool.push({ q, theme }));
+      }
+    });
+    queue = shuffle(pool);
+    // avoid repeating the just-shown question as the very next one
+    if (lastShown && queue.length > 1 && queue[0].q === lastShown) {
+      [queue[0], queue[1]] = [queue[1], queue[0]];
+    }
+  }
+
+  function draw() {
+    if (queue.length === 0) buildQueue();
+    if (queue.length === 0) return;
+
+    const pick = queue.shift();
+    lastShown = pick.q;
+
+    // restart the reveal animation
+    elQuestion.classList.remove("fade");
+    elEyebrow.classList.remove("fade");
+    void elQuestion.offsetWidth;
+
+    elQuestion.textContent = pick.q;
+    elEyebrow.textContent = pick.theme.name;
+    elCard.style.setProperty("--accent", pick.theme.color);
+
+    elQuestion.classList.add("fade");
+    elEyebrow.classList.add("fade");
+
+    elDraw.textContent = "Another one";
+  }
+
+  function renderChips() {
+    THEMES.forEach(theme => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "chip";
+      chip.setAttribute("aria-pressed", active.has(theme.key) ? "true" : "false");
+      chip.style.setProperty("--dot", theme.dot);
+      chip.innerHTML = '<span class="dot"></span>' + theme.name;
+
+      chip.addEventListener("click", () => {
+        const on = active.has(theme.key);
+        // keep at least one theme active
+        if (on && active.size === 1) return;
+        if (on) active.delete(theme.key);
+        else active.add(theme.key);
+        chip.setAttribute("aria-pressed", active.has(theme.key) ? "true" : "false");
+        buildQueue();
+      });
+
+      elChips.appendChild(chip);
+    });
+  }
+
+  elDraw.addEventListener("click", draw);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.target.classList && e.target.classList.contains("chip")) return;
+    if (e.code === "Space" || e.code === "Enter") {
+      e.preventDefault();
+      draw();
+    }
+  });
+
+  renderChips();
+  buildQueue();
+</script>
+</body>
+</html>
